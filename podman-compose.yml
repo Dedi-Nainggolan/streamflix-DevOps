@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  backend_streamflix:
+    image: quay.io/231112637/streamflix-backend:latest
+    build:
+      context: .
+      dockerfile: backend/Containerfile.backend
+    container_name: streamflix-backend
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    networks:
+      - streamflix_network
+
+  frontend_streamflix:
+    image: quay.io/231112637/streamflix-frontend:latest
+    build:
+      context: .
+      dockerfile: frontend/Containerfile.frontend
+    container_name: streamflix-frontend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend_streamflix
+    networks:
+      - streamflix_network
+
+networks:
+  streamflix_network:
+    driver: bridge
