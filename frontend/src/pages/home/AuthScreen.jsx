@@ -26,7 +26,7 @@ const AuthScreen = () => {
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           Unlimited movies, TV shows, and more
         </h1>
-        <p className="text-lg mb-4">Watch aywhere. Cancel anytime.</p>
+        <p className="text-lg mb-4">Watch anywhere. Cancel anytime.</p>
         <p className="mb-4">
           Ready to watch? Enter your email to create or restart your membership.
         </p>
@@ -37,7 +37,7 @@ const AuthScreen = () => {
         >
           <input
             type="email"
-            placeholder="Email adress"
+            placeholder="Email address"
             className="p-2 rounded flex-1 bg-black/80 border border-gray-700"
             value={email}
             onChange={e => setEmail(e.target.value)}
