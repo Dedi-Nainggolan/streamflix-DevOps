@@ -1,0 +1,35 @@
+name: StreamFlix CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "reno", "main" ]
+  pull_request:
+    branches: [ "reno", "main" ]
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install & Build Frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Install Backend Dependencies
+        run: npm install
+
+      - name: Verify Containerfiles
+        run: |
+          test -f backend/Containerfile.backend
+          test -f frontend/Containerfile.frontend
+          echo "Containerfiles and application build verified!"
