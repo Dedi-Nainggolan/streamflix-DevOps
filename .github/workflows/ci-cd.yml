@@ -43,7 +43,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy dengan Compose
-        shell: pwsh
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
