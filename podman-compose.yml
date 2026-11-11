@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    image: quay.io/231112553/streamflix-backend:latest
+    container_name: streamflix-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    restart: always
+
+  frontend:
+    image: quay.io/231112553/streamflix-frontend:latest
+    container_name: streamflix-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    restart: always

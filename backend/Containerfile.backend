@@ -1,0 +1,27 @@
+# Stage 1: Build Frontend agar /app/frontend/dist tersedia
+FROM registry.access.redhat.com/ubi9/nodejs-18:latest AS frontend-builder
+USER root
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ .
+RUN npm run build
+
+# Stage 2: Backend Server
+FROM registry.access.redhat.com/ubi9/nodejs-18:latest
+USER root
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --production
+
+COPY backend/ ./backend/
+# Salin hasil build frontend ke /app/frontend/dist
+COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+
+EXPOSE 5000
+
+ENV NODE_ENV=production
+USER 1001
+
+CMD ["node", "backend/server.js"]

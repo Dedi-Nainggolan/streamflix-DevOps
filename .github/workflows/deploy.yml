@@ -1,0 +1,40 @@
+name: CI/CD Pipeline StreamFlix
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Log in to Quay.io Registry
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Build Backend Container Image
+        run: |
+          podman build -t quay.io/${{ secrets.QUAY_USERNAME }}/streamflix-backend:latest -f backend/Containerfile.backend backend/
+
+      - name: Build Frontend Container Image
+        run: |
+          podman build -t quay.io/${{ secrets.QUAY_USERNAME }}/streamflix-frontend:latest -f frontend/Containerfile.frontend frontend/
+
+      - name: Push Backend Image to Quay.io
+        run: |
+          podman push quay.io/${{ secrets.QUAY_USERNAME }}/streamflix-backend:latest
+
+      - name: Push Frontend Image to Quay.io
+        run: |
+          podman push quay.io/${{ secrets.QUAY_USERNAME }}/streamflix-frontend:latest
